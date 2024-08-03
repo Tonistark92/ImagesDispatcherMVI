@@ -23,7 +23,7 @@ class CounterStoreFactory(
         object : CounterStore, Store<CounterIntent, CounterState, Nothing> by storeFactory.create(
             name = "CounterStore",
             initialState = CounterState(),
-            bootstrapper = SimpleBootstrapper(Unit), // Ensure a parameter is provided
+            bootstrapper = SimpleBootstrapper(Unit),
             executorFactory = { CounterExecutor() },
             reducer = CounterReducer()
         ) {}

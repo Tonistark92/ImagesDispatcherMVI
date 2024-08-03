@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.kotlinSerialization)
 }
 
 android {
@@ -67,9 +68,16 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    implementation ("com.arkivanov.mvikotlin:mvikotlin:3.3.0")
-    implementation ("com.arkivanov.mvikotlin:mvikotlin-main:3.0.0")
-    implementation ("com.arkivanov.mvikotlin:mvikotlin-extensions-coroutines:3.0.0")
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    implementation("com.arkivanov.mvikotlin:mvikotlin:3.3.0")
+    implementation("com.arkivanov.mvikotlin:mvikotlin-main:3.0.0")
+    implementation("com.arkivanov.mvikotlin:mvikotlin-extensions-coroutines:3.0.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+
+
+    implementation("com.arkivanov.decompose:decompose:2.2.0-alpha03")
+    implementation (libs.kotlinx.serialization.json)
+    implementation ("com.arkivanov.decompose:extensions-compose-jetbrains:2.1.4-compose-experimental")
+    implementation("com.arkivanov.decompose:extensions-compose-jetpack:2.1.0")
+
 
 }

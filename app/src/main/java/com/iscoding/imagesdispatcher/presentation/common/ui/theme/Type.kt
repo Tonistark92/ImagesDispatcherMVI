@@ -1,4 +1,4 @@
-package com.iscoding.imagesdispatcher.presentation.ui.theme
+package com.iscoding.imagesdispatcher.presentation.common.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

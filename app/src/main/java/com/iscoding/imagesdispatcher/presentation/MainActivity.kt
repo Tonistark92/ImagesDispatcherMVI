@@ -22,9 +22,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.arkivanov.decompose.retainedComponent
 import com.arkivanov.mvikotlin.extensions.coroutines.states
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
-import com.iscoding.imagesdispatcher.presentation.ui.theme.ImagesDispatcherTheme
+import com.iscoding.imagesdispatcher.presentation.common.ui.theme.ImagesDispatcherTheme
+import com.iscoding.imagesdispatcher.presentation.navigation.RootComponent
 
 class MainActivity : ComponentActivity() {
     private lateinit var store: CounterStore
@@ -32,14 +34,18 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        val root = retainedComponent {
+            RootComponent(it)
+        }
         setContent {
             val storeFactory = DefaultStoreFactory()
             store = CounterStoreFactory(storeFactory).create()
 
             ImagesDispatcherTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) {
-                    CounterScreen(store)
-                }
+//                Scaffold(modifier = Modifier.fillMaxSize()) {
+//                    CounterScreen(store)
+//                }
+                App(root)
             }
         }
     }
