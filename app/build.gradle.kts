@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.kotlinSerialization)
+    id("org.jlleitschuh.gradle.ktlint") version "11.1.0"
 }
 
 android {
@@ -48,8 +49,24 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-}
 
+}
+ktlint {
+    // Optional: Customize Ktlint configuration
+    version.set("0.48.0") // Set the Ktlint version
+    android.set(true) // If using Android, enable Android-specific rules
+    outputToConsole.set(true) // Output results to the console
+    reporters {
+        reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.CHECKSTYLE)
+        reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.HTML)
+    }
+    // Optional: Exclude files or directories
+    filter {
+        exclude("**/generated/**")
+    }
+
+
+}
 dependencies {
 
     implementation(libs.androidx.core.ktx)
@@ -71,13 +88,24 @@ dependencies {
     implementation("com.arkivanov.mvikotlin:mvikotlin:3.3.0")
     implementation("com.arkivanov.mvikotlin:mvikotlin-main:3.0.0")
     implementation("com.arkivanov.mvikotlin:mvikotlin-extensions-coroutines:3.0.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
 
 
     implementation("com.arkivanov.decompose:decompose:2.2.0-alpha03")
-    implementation (libs.kotlinx.serialization.json)
-    implementation ("com.arkivanov.decompose:extensions-compose-jetbrains:2.1.4-compose-experimental")
+    implementation(libs.kotlinx.serialization.json)
+    implementation("com.arkivanov.decompose:extensions-compose-jetbrains:2.1.4-compose-experimental")
     implementation("com.arkivanov.decompose:extensions-compose-jetpack:2.1.0")
 
+    implementation("io.insert-koin:koin-android:3.5.3")
+    implementation("io.insert-koin:koin-androidx-navigation:3.2.0-beta-1")
+    implementation("io.insert-koin:koin-androidx-compose:3.5.3")
+
+    implementation("com.arkivanov.mvikotlin:mvikotlin:3.0.0")
+    implementation("com.arkivanov.mvikotlin:mvikotlin-extensions-coroutines:3.0.0")
+    implementation("com.arkivanov.mvikotlin:mvikotlin-main:3.0.0")
+    implementation("com.arkivanov.mvikotlin:mvikotlin-logging:3.0.0")
+    implementation("com.arkivanov.mvikotlin:mvikotlin-timetravel:3.0.0")
+
+    implementation("io.coil-kt:coil-compose:2.7.0")
 
 }

@@ -10,49 +10,62 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.arkivanov.decompose.retainedComponent
+import com.arkivanov.decompose.DefaultComponentContext
+import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.mvikotlin.extensions.coroutines.states
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.iscoding.imagesdispatcher.presentation.common.ui.theme.ImagesDispatcherTheme
+import com.iscoding.imagesdispatcher.presentation.mainscreen.App
 import com.iscoding.imagesdispatcher.presentation.navigation.RootComponent
+import org.koin.core.parameter.parametersOf
+import org.koin.core.scope.Scope
+import org.koin.mp.KoinPlatform.getKoin
 
 class MainActivity : ComponentActivity() {
-    private lateinit var store: CounterStore
+//    private lateinit var store: CounterStore
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        val root = retainedComponent {
-            RootComponent(it)
-        }
+//        val root = retainedComponent {
+//            RootComponent(it)
+//        }
+//        val rootComponent: RootComponent by inject { parametersOf(DefaultComponentContext(this.lifecycle)) }
+//        val rootComponent: RootComponent by rootScope.inject { parametersOf(retainedComponent{RootComponent(it)}) }
+//        val rootComponent by inject<RootComponent> { parametersOf(DefaultComponentContext(this.lifecycle)) }
+
+
+        val rootComponent: RootComponent by rootScope.inject { parametersOf(DefaultComponentContext(this.lifecycle)) }
+
+
         setContent {
-            val storeFactory = DefaultStoreFactory()
-            store = CounterStoreFactory(storeFactory).create()
+//            val storeFactory = DefaultStoreFactory()
+//            store = CounterStoreFactory(storeFactory).create()
+
 
             ImagesDispatcherTheme {
 //                Scaffold(modifier = Modifier.fillMaxSize()) {
 //                    CounterScreen(store)
 //                }
-                App(root)
+                App(rootComponent)
             }
         }
     }
 }
+private val rootScope: Scope by lazy {
+    getKoin().getOrCreateScope<RootComponent>(RootComponent::class.simpleName!!)
+}
 
-
-// CounterScreen.kt
+// that screen for learnings purposes
 @Composable
 fun CounterScreen(store: CounterStore) {
     val state by store.states.collectAsState(initial = CounterState())

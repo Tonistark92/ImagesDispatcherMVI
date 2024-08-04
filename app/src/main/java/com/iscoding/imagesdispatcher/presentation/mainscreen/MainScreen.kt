@@ -1,4 +1,4 @@
-package com.iscoding.imagesdispatcher.presentation
+package com.iscoding.imagesdispatcher.presentation.mainscreen
 
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
@@ -15,7 +15,6 @@ import com.arkivanov.decompose.extensions.compose.jetbrains.stack.Children
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.slide
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.stackAnimation
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
-import com.iscoding.imagesdispatcher.presentation.navigation.MainScreenComponent
 import com.iscoding.imagesdispatcher.presentation.navigation.RootComponent
 import com.iscoding.imagesdispatcher.presentation.networkimagescreen.NetworkImagesScreen
 import com.iscoding.imagesdispatcher.presentation.resourcesimagescreen.ResourcesImagesScreen
@@ -64,6 +63,7 @@ fun MainScreen(component: MainScreenComponent) {
         }) {
             Text(text = "Go To Storage Images")
         }
+
     }
 
 }

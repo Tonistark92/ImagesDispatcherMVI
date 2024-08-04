@@ -1,7 +1,7 @@
-package com.iscoding.imagesdispatcher.presentation.navigation
+package com.iscoding.imagesdispatcher.presentation.storageimagescreen
 
 import com.arkivanov.decompose.ComponentContext
 
-class NetworkImagesScreenComponent(
+class StorageImagesScreenComponent (
     componentContext: ComponentContext,
 ): ComponentContext by componentContext {}

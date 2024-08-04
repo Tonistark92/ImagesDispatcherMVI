@@ -5,12 +5,17 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
-import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.pushNew
+import com.iscoding.imagesdispatcher.presentation.mainscreen.MainScreenComponent
+import com.iscoding.imagesdispatcher.presentation.networkimagescreen.NetworkImagesScreenComponent
+import com.iscoding.imagesdispatcher.presentation.networkimagescreen.mvi.NetworkImagesScreenStoreFactory
+import com.iscoding.imagesdispatcher.presentation.resourcesimagescreen.ResourcesImagesScreenComponent
+import com.iscoding.imagesdispatcher.presentation.storageimagescreen.StorageImagesScreenComponent
 import kotlinx.serialization.Serializable
 
 class RootComponent(
-    componentContext: ComponentContext
+    componentContext: ComponentContext,
+    private val networkImagesScreenStoreFactory: NetworkImagesScreenStoreFactory,
 ) : ComponentContext by componentContext {
 
     private val navigation = StackNavigation<Configuration>()
@@ -28,9 +33,13 @@ class RootComponent(
         context: ComponentContext
     ): Child {
         return when (config) {
-            Configuration.NetworkImagesScreen -> Child.NetworkImagesScreen(NetworkImagesScreenComponent(componentContext = context,))
+            Configuration.NetworkImagesScreen -> Child.NetworkImagesScreen(
+                NetworkImagesScreenComponent(componentContext = context,networkImagesScreenStoreFactory,)
+            )
 
-            Configuration.ResourcesImagesScreen -> Child.ResourcesImagesScreen(ResourcesImagesScreenComponent(componentContext = context))
+            Configuration.ResourcesImagesScreen -> Child.ResourcesImagesScreen(
+                ResourcesImagesScreenComponent(componentContext = context)
+            )
 
             Configuration.MainScreen -> Child.MainScreen(MainScreenComponent(componentContext = context,
                 onNavigateToNetworkImages = {
@@ -49,7 +58,9 @@ class RootComponent(
                 }
                 ))
 
-            Configuration.StorageImagesScreen -> Child.StorageImagesScreen(StorageImagesScreenComponent(componentContext = context))
+            Configuration.StorageImagesScreen -> Child.StorageImagesScreen(
+                StorageImagesScreenComponent(componentContext = context)
+            )
         }
     }
 

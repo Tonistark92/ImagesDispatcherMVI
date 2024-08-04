@@ -6,7 +6,7 @@ import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
-
+// that File  was for learning purposes
 data class CounterState(val count: Int = 0)
 
 sealed class CounterIntent {

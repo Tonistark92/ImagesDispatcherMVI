@@ -1,4 +1,4 @@
-package com.iscoding.imagesdispatcher.presentation.navigation
+package com.iscoding.imagesdispatcher.presentation.mainscreen
 
 import com.arkivanov.decompose.ComponentContext
 
