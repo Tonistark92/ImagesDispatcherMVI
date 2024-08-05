@@ -10,12 +10,16 @@ import com.iscoding.imagesdispatcher.presentation.mainscreen.MainScreenComponent
 import com.iscoding.imagesdispatcher.presentation.networkimagescreen.NetworkImagesScreenComponent
 import com.iscoding.imagesdispatcher.presentation.networkimagescreen.mvi.NetworkImagesScreenStoreFactory
 import com.iscoding.imagesdispatcher.presentation.resourcesimagescreen.ResourcesImagesScreenComponent
+import com.iscoding.imagesdispatcher.presentation.resourcesimagescreen.mvi.ResourcesImagesScreenStoreFactory
 import com.iscoding.imagesdispatcher.presentation.storageimagescreen.StorageImagesScreenComponent
+import com.iscoding.imagesdispatcher.presentation.storageimagescreen.mvi.StorageImagesScreenStoreFactory
 import kotlinx.serialization.Serializable
 
 class RootComponent(
     componentContext: ComponentContext,
     private val networkImagesScreenStoreFactory: NetworkImagesScreenStoreFactory,
+    private val resourcesImagesScreenStoreFactory: ResourcesImagesScreenStoreFactory,
+    private val storageImagesScreenStoreFactory: StorageImagesScreenStoreFactory,
 ) : ComponentContext by componentContext {
 
     private val navigation = StackNavigation<Configuration>()
@@ -38,29 +42,28 @@ class RootComponent(
             )
 
             Configuration.ResourcesImagesScreen -> Child.ResourcesImagesScreen(
-                ResourcesImagesScreenComponent(componentContext = context)
+                ResourcesImagesScreenComponent(componentContext = context, resourcesImagesScreenStoreFactory)
+            )
+
+            Configuration.StorageImagesScreen -> Child.StorageImagesScreen(
+                StorageImagesScreenComponent(componentContext = context, storageImagesScreenStoreFactory)
             )
 
             Configuration.MainScreen -> Child.MainScreen(MainScreenComponent(componentContext = context,
                 onNavigateToNetworkImages = {
-                    Log.d("ISLAM", "onNavigateToNetworkImages")
                     navigation.pushNew(Configuration.NetworkImagesScreen)
                 },
                 onNavigateToStorageImages = {
                     navigation.pushNew(Configuration.StorageImagesScreen)
-                    Log.d("ISLAM", "onNavigateToStorageImageS")
 
                 },
                 onNavigateToResourcesImages = {
                     navigation.pushNew(Configuration.ResourcesImagesScreen)
-                    Log.d("ISLAM", "onNavigateToResourcesImages")
 
                 }
                 ))
 
-            Configuration.StorageImagesScreen -> Child.StorageImagesScreen(
-                StorageImagesScreenComponent(componentContext = context)
-            )
+
         }
     }
 

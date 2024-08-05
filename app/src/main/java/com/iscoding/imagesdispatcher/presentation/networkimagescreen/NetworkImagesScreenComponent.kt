@@ -6,10 +6,10 @@ import com.iscoding.imagesdispatcher.presentation.networkimagescreen.mvi.Network
 
 class NetworkImagesScreenComponent(
     componentContext: ComponentContext,
-    storeFactory: NetworkImagesScreenStoreFactory
+    networkImagesScreenstoreFactory: NetworkImagesScreenStoreFactory
 ): ComponentContext by componentContext {
 
-    var store = storeFactory.create()
+    var store = networkImagesScreenstoreFactory.create()
 
     fun onLoadNetworkImages() {
         store.accept(NetworkImagesScreenIntent.LoadData)

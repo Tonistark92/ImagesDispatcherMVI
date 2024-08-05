@@ -15,17 +15,17 @@ val navigationModule = module {
 //    }
     scope(named<RootComponent>()) {
         scoped { (componentContext: ComponentContext) ->
-            RootComponent(componentContext, get())
+            RootComponent(componentContext, get(), get () , get())
         }
     }
     factory { (componentContext: ComponentContext) ->
         NetworkImagesScreenComponent(componentContext,get())
     }
     factory { (componentContext: ComponentContext) ->
-        ResourcesImagesScreenComponent(componentContext)
+        ResourcesImagesScreenComponent(componentContext ,get())
     }
     factory { (componentContext: ComponentContext) ->
-        StorageImagesScreenComponent(componentContext)
+        StorageImagesScreenComponent(componentContext, get())
     }
     factory { (componentContext: ComponentContext, onNavigateToNetworkImages: () -> Unit, onNavigateToStorageImages: () -> Unit, onNavigateToResourcesImages: () -> Unit) ->
         MainScreenComponent(componentContext, onNavigateToNetworkImages, onNavigateToStorageImages, onNavigateToResourcesImages)

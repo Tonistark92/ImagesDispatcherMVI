@@ -21,7 +21,7 @@ class NetworkImagesScreenStoreFactory(
             initialState = NetworkImagesScreenState(),
             bootstrapper = SimpleBootstrapper(Action.LoadInitialData),
             executorFactory = { NetworkImagesScreenSExecutor(repository) },
-            reducer = ScreenAReducer()
+            reducer = NetworkImagesScreenReducer()
         ) {}
 
     private class NetworkImagesScreenSExecutor(
@@ -65,7 +65,7 @@ class NetworkImagesScreenStoreFactory(
 //        }
 //    }
 
-    private class ScreenAReducer : Reducer<NetworkImagesScreenState, NetworkImagesScreenResult> {
+    private class NetworkImagesScreenReducer : Reducer<NetworkImagesScreenState, NetworkImagesScreenResult> {
         override fun NetworkImagesScreenState.reduce(msg: NetworkImagesScreenResult): NetworkImagesScreenState {
             return when (msg) {
                 is NetworkImagesScreenResult.DataLoaded -> copy(data = msg.data, isLoading = false)
