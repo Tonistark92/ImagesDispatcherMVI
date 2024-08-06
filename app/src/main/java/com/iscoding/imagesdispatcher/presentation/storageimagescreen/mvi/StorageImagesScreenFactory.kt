@@ -6,6 +6,7 @@ import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.iscoding.imagesdispatcher.domain.repository.ImagesDispatcherRepository
+import com.iscoding.imagesdispatcher.domain.usecases.GetImagesUseCase
 import com.iscoding.imagesdispatcher.presentation.networkimagescreen.mvi.Action
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -16,19 +17,21 @@ interface StorageImagesScreenStore :
 
 class StorageImagesScreenStoreFactory(
     private val storeFactory: StoreFactory,
-    private val repository: ImagesDispatcherRepository
+    private val getImagesUseCase: GetImagesUseCase
+
 ) {
     fun create(): StorageImagesScreenStore =
         object : StorageImagesScreenStore, Store<StorageImagesScreenIntent,StorageImagesScreenState, Nothing> by storeFactory.create(
             name = "StorageImagesScreenStore",
             initialState = StorageImagesScreenState(),
             bootstrapper = SimpleBootstrapper(Action.LoadInitialData),
-            executorFactory = { StorageImagesScreenExecutor(repository) },
+            executorFactory = { StorageImagesScreenExecutor(getImagesUseCase) },
             reducer = StorageImagesScreenReducer()
         ) {}
 
     private class StorageImagesScreenExecutor(
-        private val repository: ImagesDispatcherRepository
+        private val getImagesUseCase: GetImagesUseCase
+
 
     ) : CoroutineExecutor<StorageImagesScreenIntent, Action, StorageImagesScreenState, StorageImagesScreenResult, Nothing>() {
         override fun executeAction(action: Action, getState: () -> StorageImagesScreenState) {
@@ -36,7 +39,7 @@ class StorageImagesScreenStoreFactory(
                 is Action.LoadInitialData -> {
                     scope.launch {
                         try {
-                            val data = repository.getImages()
+                            val data = getImagesUseCase()
                             dispatch(StorageImagesScreenResult.Loading(true))
                             delay(2000)
                             dispatch(StorageImagesScreenResult.DataLoaded(data))
@@ -54,7 +57,7 @@ class StorageImagesScreenStoreFactory(
             when (intent) {
                 is StorageImagesScreenIntent.LoadData ->scope.launch {
                     try {
-                        val data = repository.getImages()
+                        val data = getImagesUseCase()
                         dispatch(StorageImagesScreenResult.Loading(true))
                         delay(2000)
                         dispatch(StorageImagesScreenResult.DataLoaded(data))

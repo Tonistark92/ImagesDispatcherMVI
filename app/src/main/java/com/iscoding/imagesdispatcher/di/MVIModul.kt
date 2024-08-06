@@ -13,29 +13,22 @@ val mviModule = module {
     single {
         NetworkImagesScreenStoreFactory(
             storeFactory = get(),
-            repository = get(networkQualifier)
+            getImagesUseCase = get(networkQualifier)
         )
     }
     single {
         ResourcesImagesScreenStoreFactory(
-            storeFactory = get(), repository = get(
+            storeFactory = get(), getImagesUseCase = get(
                 resourcesQualifier
             )
         )
     }
     single {
         StorageImagesScreenStoreFactory(
-            storeFactory = get(), repository = get(
+            storeFactory = get(), getImagesUseCase = get(
                 storageQualifier
             )
         )
     }
 
-//    // Provide StoreFactory
-//    single { DefaultStoreFactory() }
-//
-//    // Provide NetworkImagesScreenStoreFactory
-//    factory { (storeFactory: DefaultStoreFactory) ->
-//        NetworkImagesScreenStoreFactory(storeFactory)
-//    }
 }

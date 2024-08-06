@@ -6,6 +6,7 @@ import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.iscoding.imagesdispatcher.domain.repository.ImagesDispatcherRepository
+import com.iscoding.imagesdispatcher.domain.usecases.GetImagesUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -14,19 +15,20 @@ interface NetworkImagesScreenStore :
 
 class NetworkImagesScreenStoreFactory(
     private val storeFactory: StoreFactory,
-    private val repository: ImagesDispatcherRepository
+    private val getImagesUseCase: GetImagesUseCase
 ) {
     fun create(): NetworkImagesScreenStore =
         object : NetworkImagesScreenStore, Store<NetworkImagesScreenIntent, NetworkImagesScreenState, Nothing> by storeFactory.create(
             name = "NetworkImagesScreenStore",
             initialState = NetworkImagesScreenState(),
             bootstrapper = SimpleBootstrapper(Action.LoadInitialData),
-            executorFactory = { NetworkImagesScreenSExecutor(repository) },
+            executorFactory = { NetworkImagesScreenSExecutor(getImagesUseCase) },
             reducer = NetworkImagesScreenReducer()
         ) {}
 
     private class NetworkImagesScreenSExecutor(
-        private val repository: ImagesDispatcherRepository
+        private val getImagesUseCase: GetImagesUseCase
+
 
     ) : CoroutineExecutor<NetworkImagesScreenIntent, Action, NetworkImagesScreenState, NetworkImagesScreenResult, Nothing>() {
         override fun executeAction(action: Action, getState: () -> NetworkImagesScreenState) {
@@ -34,7 +36,7 @@ class NetworkImagesScreenStoreFactory(
                 is Action.LoadInitialData -> {
                     scope.launch {
                         try {
-                            val data = repository.getImages()
+                            val data =getImagesUseCase()
                             dispatch(NetworkImagesScreenResult.Loading(true))
                             delay(2000)
 
@@ -51,7 +53,7 @@ class NetworkImagesScreenStoreFactory(
             when (intent) {
                 is NetworkImagesScreenIntent.LoadData ->scope.launch {
                     try {
-                        val data = repository.getImages()
+                        val data = getImagesUseCase()
                         dispatch(NetworkImagesScreenResult.Loading(true))
                         delay(2000)
 

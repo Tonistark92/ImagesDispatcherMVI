@@ -7,6 +7,7 @@ import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.iscoding.imagesdispatcher.domain.repository.ImagesDispatcherRepository
+import com.iscoding.imagesdispatcher.domain.usecases.GetImagesUseCase
 import com.iscoding.imagesdispatcher.presentation.networkimagescreen.mvi.Action
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -16,19 +17,21 @@ interface ResourcesImagesScreenStore :
 
 class ResourcesImagesScreenStoreFactory(
     private val storeFactory: StoreFactory,
-    private val repository: ImagesDispatcherRepository
+    private val getImagesUseCase: GetImagesUseCase
+
 ) {
     fun create(): ResourcesImagesScreenStore =
         object : ResourcesImagesScreenStore, Store<ResourcesImagesScreenIntent, ResourcesImagesScreenState, Nothing> by storeFactory.create(
             name = "ResourcesImagesScreenStore",
             initialState = ResourcesImagesScreenState(),
             bootstrapper = SimpleBootstrapper(Action.LoadInitialData),
-            executorFactory = { ResourcesImagesScreenExecutor(repository) },
+            executorFactory = { ResourcesImagesScreenExecutor(getImagesUseCase) },
             reducer = ResourcesImagesScreenReducer()
         ) {}
 
     private class ResourcesImagesScreenExecutor(
-        private val repository: ImagesDispatcherRepository
+        private val getImagesUseCase: GetImagesUseCase
+
 
     ) : CoroutineExecutor<ResourcesImagesScreenIntent, Action, ResourcesImagesScreenState, ResourcesImagesScreenResult, Nothing>() {
         override fun executeAction(action: Action, getState: () -> ResourcesImagesScreenState) {
@@ -36,7 +39,7 @@ class ResourcesImagesScreenStoreFactory(
                 is Action.LoadInitialData -> {
                     scope.launch {
                         try {
-                            val data = repository.getImages()
+                            val data = getImagesUseCase()
 
                             dispatch(ResourcesImagesScreenResult.Loading(true))
                             delay(2000)
@@ -55,7 +58,7 @@ class ResourcesImagesScreenStoreFactory(
             when (intent) {
                 is ResourcesImagesScreenIntent.LoadData ->scope.launch {
                     try {
-                        val data = repository.getImages()
+                        val data = getImagesUseCase()
                         dispatch(ResourcesImagesScreenResult.Loading(true))
                         delay(2000)
 
