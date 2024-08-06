@@ -13,7 +13,7 @@ class StorageImagesDispatcherRepository (private val context: Context): ImagesDi
     return    loadPhotosFromExternalStorage(context)
     }
 
-    suspend fun loadPhotosFromExternalStorage(context: Context): List<SharedStoragePhoto> {
+    suspend fun loadPhotosFromExternalStorage(context: Context): List<Uri> {
         return withContext(Dispatchers.Default) {
             val collection = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
                 MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL)
@@ -34,7 +34,7 @@ class StorageImagesDispatcherRepository (private val context: Context): ImagesDi
                 "image/svg+xml"
             )
 
-            val photos = mutableListOf<SharedStoragePhoto>()
+            val photos = mutableListOf<Uri>()
 
             context.contentResolver.query(
                 collection,
@@ -57,7 +57,7 @@ class StorageImagesDispatcherRepository (private val context: Context): ImagesDi
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                         id
                     )
-                    photos.add(SharedStoragePhoto(id, displayName, width, height, contentUri))
+                    photos.add(contentUri)
                 }
             }
 

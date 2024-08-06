@@ -15,6 +15,7 @@ class ResourcesImagesDispatcherRepository(private val context: Context) : Images
       return  loadImagesFromResources2(context)
     }
 
+    @SuppressLint("DiscouragedApi")
     fun loadImagesFromResources2(context: Context): List<Int> {
         Log.d("ISLAM", "repo: is called")
         val resources = context.resources
