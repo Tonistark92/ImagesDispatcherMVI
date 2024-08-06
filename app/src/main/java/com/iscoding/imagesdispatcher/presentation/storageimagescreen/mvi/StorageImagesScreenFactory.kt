@@ -7,6 +7,7 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.iscoding.imagesdispatcher.domain.repository.ImagesDispatcherRepository
 import com.iscoding.imagesdispatcher.presentation.networkimagescreen.mvi.Action
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
@@ -36,7 +37,12 @@ class StorageImagesScreenStoreFactory(
                     scope.launch {
                         try {
                             val data = repository.getImages()
+                            dispatch(StorageImagesScreenResult.Loading(true))
+                            delay(2000)
                             dispatch(StorageImagesScreenResult.DataLoaded(data))
+
+                            dispatch(StorageImagesScreenResult.Loading(false))
+
                         } catch (e: Exception) {
                             dispatch(StorageImagesScreenResult.Error(e.message ?: "Unknown error"))
                         }
@@ -49,7 +55,11 @@ class StorageImagesScreenStoreFactory(
                 is StorageImagesScreenIntent.LoadData ->scope.launch {
                     try {
                         val data = repository.getImages()
+                        dispatch(StorageImagesScreenResult.Loading(true))
+                        delay(2000)
                         dispatch(StorageImagesScreenResult.DataLoaded(data))
+
+                        dispatch(StorageImagesScreenResult.Loading(false))
                     } catch (e: Exception) {
                         dispatch(StorageImagesScreenResult.Error(e.message ?: "Unknown error"))
                     }
@@ -65,6 +75,7 @@ class StorageImagesScreenStoreFactory(
             return when (msg) {
                 is StorageImagesScreenResult.DataLoaded -> copy(data = msg.data, isLoading = false)
                 is StorageImagesScreenResult.Error -> copy(error = msg.message, isLoading = false)
+                is StorageImagesScreenResult.Loading -> copy( isLoading = msg.isLoading)
             }
         }
     }

@@ -8,4 +8,5 @@ data class NetworkImagesScreenState(
 sealed class NetworkImagesScreenResult {
     data class DataLoaded(val data: List<Any>) : NetworkImagesScreenResult()
     data class Error(val message: String) : NetworkImagesScreenResult()
+    data class Loading(val isLoading: Boolean) : NetworkImagesScreenResult()
 }

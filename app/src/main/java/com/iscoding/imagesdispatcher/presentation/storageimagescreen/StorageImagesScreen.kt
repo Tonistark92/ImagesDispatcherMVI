@@ -3,10 +3,12 @@ package com.iscoding.imagesdispatcher.presentation.storageimagescreen
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -23,29 +25,40 @@ import com.iscoding.imagesdispatcher.presentation.storageimagescreen.mvi.Storage
 @Composable
 fun StorageImagesScreen(component: StorageImagesScreenComponent) {
     val state: StorageImagesScreenState by component.store.states.collectAsState(initial = StorageImagesScreenState())
-    Log.d("ISLAM", "state: ${state.data.size}")
-    Log.d("ISLAM", "state: ${state.data.toString()}")
-    Column(
-        modifier = Modifier
-            .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-
-
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        if (state.isLoading) {
+            CircularProgressIndicator()
+        }
+        if (state.error?.isNotEmpty() == true) {
+            Text(text = state.error!!)
+        }
         if (state.data.isNotEmpty()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
 
-            LazyColumn {
-                items(state.data.size) {
 
-                    val painter = rememberAsyncImagePainter(model = state.data[it])
+                if (state.data.isNotEmpty()) {
 
-                    Image(
-                        painter  = painter,
-                        contentDescription = null,
-                        modifier = Modifier.size(200.dp))
+                    LazyColumn {
+                        items(state.data.size) {
+
+                            val painter = rememberAsyncImagePainter(model = state.data[it])
+
+                            Image(
+                                painter = painter,
+                                contentDescription = null,
+                                modifier = Modifier.size(200.dp)
+                            )
+                        }
+                    }
                 }
             }
         }
+
     }
+
 }

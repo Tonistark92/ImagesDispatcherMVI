@@ -6,6 +6,7 @@ import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.iscoding.imagesdispatcher.domain.repository.ImagesDispatcherRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 interface NetworkImagesScreenStore :
@@ -34,7 +35,11 @@ class NetworkImagesScreenStoreFactory(
                     scope.launch {
                         try {
                             val data = repository.getImages()
+                            dispatch(NetworkImagesScreenResult.Loading(true))
+                            delay(2000)
+
                             dispatch(NetworkImagesScreenResult.DataLoaded(data))
+                            dispatch(NetworkImagesScreenResult.Loading(false))
                         } catch (e: Exception) {
                             dispatch(NetworkImagesScreenResult.Error(e.message ?: "Unknown error"))
                         }
@@ -47,7 +52,12 @@ class NetworkImagesScreenStoreFactory(
                 is NetworkImagesScreenIntent.LoadData ->scope.launch {
                     try {
                         val data = repository.getImages()
+                        dispatch(NetworkImagesScreenResult.Loading(true))
+                        delay(2000)
+
                         dispatch(NetworkImagesScreenResult.DataLoaded(data))
+                        dispatch(NetworkImagesScreenResult.Loading(false))
+
                     } catch (e: Exception) {
                         dispatch(NetworkImagesScreenResult.Error(e.message ?: "Unknown error"))
                     }
@@ -70,6 +80,7 @@ class NetworkImagesScreenStoreFactory(
             return when (msg) {
                 is NetworkImagesScreenResult.DataLoaded -> copy(data = msg.data, isLoading = false)
                 is NetworkImagesScreenResult.Error -> copy(error = msg.message, isLoading = false)
+                is NetworkImagesScreenResult.Loading -> copy( isLoading = msg.isLoading)
             }
         }
     }

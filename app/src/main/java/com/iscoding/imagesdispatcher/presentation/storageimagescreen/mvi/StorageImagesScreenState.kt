@@ -8,4 +8,5 @@ data class StorageImagesScreenState(
 sealed class StorageImagesScreenResult {
     data class DataLoaded(val data: List<Any>) : StorageImagesScreenResult()
     data class Error(val message: String) : StorageImagesScreenResult()
+    data class Loading(val isLoading: Boolean) : StorageImagesScreenResult()
 }

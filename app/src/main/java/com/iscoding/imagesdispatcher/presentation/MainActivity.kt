@@ -32,7 +32,6 @@ import org.koin.core.scope.Scope
 import org.koin.mp.KoinPlatform.getKoin
 
 class MainActivity : ComponentActivity() {
-    //    private lateinit var store: CounterStore
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,27 +70,3 @@ private val rootScope: Scope by lazy {
 }
 
 // that screen for learnings purposes
-@Composable
-fun CounterScreen(store: CounterStore) {
-    val state by store.states.collectAsState(initial = CounterState())
-
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(text = "Count: ${state.count}")
-
-        Row {
-            Button(onClick = { store.accept(CounterIntent.Increment) }) {
-                Text(text = "Increment")
-            }
-
-            Spacer(modifier = Modifier.width(16.dp))
-
-            Button(onClick = { store.accept(CounterIntent.Decrement) }) {
-                Text(text = "Decrement")
-            }
-        }
-    }
-}

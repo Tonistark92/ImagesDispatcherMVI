@@ -8,6 +8,7 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.iscoding.imagesdispatcher.domain.repository.ImagesDispatcherRepository
 import com.iscoding.imagesdispatcher.presentation.networkimagescreen.mvi.Action
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 interface ResourcesImagesScreenStore :
@@ -36,9 +37,13 @@ class ResourcesImagesScreenStoreFactory(
                     scope.launch {
                         try {
                             val data = repository.getImages()
-                            Log.d("ISLAM", "factory: ${data.toString()}")
+
+                            dispatch(ResourcesImagesScreenResult.Loading(true))
+                            delay(2000)
 
                             dispatch(ResourcesImagesScreenResult.DataLoaded(data))
+                            dispatch(ResourcesImagesScreenResult.Loading(false))
+
                         } catch (e: Exception) {
                             dispatch(ResourcesImagesScreenResult.Error(e.message ?: "Unknown error"))
                         }
@@ -51,7 +56,11 @@ class ResourcesImagesScreenStoreFactory(
                 is ResourcesImagesScreenIntent.LoadData ->scope.launch {
                     try {
                         val data = repository.getImages()
+                        dispatch(ResourcesImagesScreenResult.Loading(true))
+                        delay(2000)
+
                         dispatch(ResourcesImagesScreenResult.DataLoaded(data))
+                        dispatch(ResourcesImagesScreenResult.Loading(false))
                     } catch (e: Exception) {
                         dispatch(ResourcesImagesScreenResult.Error(e.message ?: "Unknown error"))
                     }
@@ -66,6 +75,7 @@ class ResourcesImagesScreenStoreFactory(
             return when (msg) {
                 is ResourcesImagesScreenResult.DataLoaded -> copy(data = msg.data, isLoading = false)
                 is ResourcesImagesScreenResult.Error -> copy(error = msg.message, isLoading = false)
+                is ResourcesImagesScreenResult.Loading -> copy( isLoading = msg.isLoading)
             }
         }
     }

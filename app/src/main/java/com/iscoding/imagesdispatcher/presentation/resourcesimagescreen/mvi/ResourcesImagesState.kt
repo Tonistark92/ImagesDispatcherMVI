@@ -8,4 +8,5 @@ data class ResourcesImagesScreenState(
 sealed class ResourcesImagesScreenResult {
     data class DataLoaded(val data: List<Any>) : ResourcesImagesScreenResult()
     data class Error(val message: String) : ResourcesImagesScreenResult()
+    data class Loading(val isLoading: Boolean) : ResourcesImagesScreenResult()
 }
