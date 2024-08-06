@@ -5,7 +5,11 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
+import com.arkivanov.decompose.router.stack.pop
+import com.arkivanov.decompose.router.stack.popTo
 import com.arkivanov.decompose.router.stack.pushNew
+import com.arkivanov.essenty.backhandler.BackCallback
+import com.arkivanov.essenty.backhandler.BackHandler
 import com.iscoding.imagesdispatcher.presentation.mainscreen.MainScreenComponent
 import com.iscoding.imagesdispatcher.presentation.networkimagescreen.NetworkImagesScreenComponent
 import com.iscoding.imagesdispatcher.presentation.networkimagescreen.mvi.NetworkImagesScreenStoreFactory
@@ -20,7 +24,7 @@ class RootComponent(
     private val networkImagesScreenStoreFactory: NetworkImagesScreenStoreFactory,
     private val resourcesImagesScreenStoreFactory: ResourcesImagesScreenStoreFactory,
     private val storageImagesScreenStoreFactory: StorageImagesScreenStoreFactory,
-) : ComponentContext by componentContext {
+) : MyBackHandler, ComponentContext by componentContext {
 
     private val navigation = StackNavigation<Configuration>()
     val childStack = childStack(
@@ -30,7 +34,9 @@ class RootComponent(
         handleBackButton = true,
         childFactory = ::createChild
     )
-
+    override fun onBackClicked(toIndex: Int) {
+        navigation.popTo(index = toIndex)
+    }
     @OptIn(ExperimentalDecomposeApi::class)
     private fun createChild(
         config: Configuration,
@@ -89,4 +95,7 @@ class RootComponent(
         data object MainScreen : Configuration()
 
     }
+}
+interface MyBackHandler  {
+    fun onBackClicked(toIndex: Int)
 }

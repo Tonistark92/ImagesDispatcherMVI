@@ -1,5 +1,6 @@
 package com.iscoding.imagesdispatcher.presentation.networkimagescreen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,7 +19,6 @@ import com.iscoding.imagesdispatcher.presentation.networkimagescreen.mvi.Network
 @Composable
 fun NetworkImagesScreen(component: NetworkImagesScreenComponent) {
     val state: NetworkImagesScreenState by component.store.states.collectAsState(initial = NetworkImagesScreenState())
-
     Column(
         modifier = Modifier
             .fillMaxSize(),

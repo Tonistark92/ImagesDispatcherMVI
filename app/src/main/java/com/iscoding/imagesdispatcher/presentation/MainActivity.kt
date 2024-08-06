@@ -3,6 +3,7 @@ package com.iscoding.imagesdispatcher.presentation
 import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.addCallback
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
@@ -31,36 +32,40 @@ import org.koin.core.scope.Scope
 import org.koin.mp.KoinPlatform.getKoin
 
 class MainActivity : ComponentActivity() {
-//    private lateinit var store: CounterStore
+    //    private lateinit var store: CounterStore
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-//        val root = retainedComponent {
-//            RootComponent(it)
-//        }
-//        val rootComponent: RootComponent by inject { parametersOf(DefaultComponentContext(this.lifecycle)) }
-//        val rootComponent: RootComponent by rootScope.inject { parametersOf(retainedComponent{RootComponent(it)}) }
-//        val rootComponent by inject<RootComponent> { parametersOf(DefaultComponentContext(this.lifecycle)) }
 
 
-        val rootComponent: RootComponent by rootScope.inject { parametersOf(DefaultComponentContext(this.lifecycle)) }
+        val rootComponent: RootComponent by rootScope.inject {
+            parametersOf(
+                DefaultComponentContext(
+                    this.lifecycle
+                )
+            )
+        }
 
+        onBackPressedDispatcher.addCallback(this) {
+            if(rootComponent.childStack.value.backStack.isEmpty()) {
+                finish()
+            } else {
+                rootComponent.onBackClicked(rootComponent.childStack.value.backStack.size - 1)
+            }
+
+        }
 
         setContent {
-//            val storeFactory = DefaultStoreFactory()
-//            store = CounterStoreFactory(storeFactory).create()
 
 
             ImagesDispatcherTheme {
-//                Scaffold(modifier = Modifier.fillMaxSize()) {
-//                    CounterScreen(store)
-//                }
                 App(rootComponent)
             }
         }
     }
 }
+
 private val rootScope: Scope by lazy {
     getKoin().getOrCreateScope<RootComponent>(RootComponent::class.simpleName!!)
 }
